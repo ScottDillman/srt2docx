@@ -49,7 +49,7 @@ def buildDocument(values, subs, title, version):
     document.add_heading(title, 0)
 
     ## add SRT data in table
-    table = document.add_table(rows=1,cols=values.settings.table.cols)
+    table = document.add_table(rows=1, cols=values.settings.table.cols)
 
     ## create table header
     hdr_cells = table.rows[0].cells
