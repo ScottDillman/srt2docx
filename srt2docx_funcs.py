@@ -59,7 +59,6 @@ def buildDocument(values, subs, title, version):
         count = count + 1
 
     ## iterate over the subs and add data to table
-    ## TODO: format time
     for item in subs:
         row_cells = table.add_row().cells
 
