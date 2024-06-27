@@ -131,7 +131,6 @@ def processFiles(values, files: list, version: str):
             ## build doc
             buildDocument(values, subs, Path(i).stem, version)
 
-    return subs
 
 
 def init(version: str) -> dict:
@@ -146,6 +145,6 @@ def init(version: str) -> dict:
 
     ## do the work
     files = readFiles(values)
-    srt_data = processFiles(values, files, version)
+    processFiles(values, files, version)
 
     return values
