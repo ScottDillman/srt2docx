@@ -18,6 +18,8 @@ Todo:
     * Option to go directly to google docs
     * Option to combine all files into one docx
     * add recursion option glob.glob('**/*.txt', recursive=True)
+    * add better error handling
+    * add tests
 
 This script reads settings from a srt2docx_settings.yaml file in the same directory as the
 script file. Edit this file to personalize the settings. This only has to be done once.
@@ -75,11 +77,11 @@ def main():
         action="version",
         version="%(prog)s " + __version__ + " | {} | {}".format(__contact__, __web__),
     )
-    args = parser.parse_args()
+    parser.parse_args()
 
     ## do any init we need
     logger.info("Script started: [{}]".format(os.path.realpath(inspect.stack()[0][1])))
-    v = srt2docx_funcs.init(__version__)
+    srt2docx_funcs.init(__version__)
 
 
 if __name__ == "__main__":

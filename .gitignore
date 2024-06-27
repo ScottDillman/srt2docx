@@ -2,3 +2,4 @@ pyenv
 __pycache__/
 .ruff_cache
 .vscode
+test

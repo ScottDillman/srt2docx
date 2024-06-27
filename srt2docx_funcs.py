@@ -20,7 +20,6 @@ Example:
 """
 
 import uuid
-import sys
 from munch import munchify
 import yaml
 from loguru import logger
@@ -50,7 +49,7 @@ def buildDocument(values, subs, title, version):
     document.add_heading(title, 0)
 
     ## add SRT data in table
-    table = document.add_table(rows=len(subs), cols=values.settings.table.cols)
+    table = document.add_table(rows=1,cols=values.settings.table.cols)
 
     ## create table header
     hdr_cells = table.rows[0].cells
@@ -63,9 +62,12 @@ def buildDocument(values, subs, title, version):
     ## TODO: format time
     for item in subs:
         row_cells = table.add_row().cells
-        row_cells[0].text = "{}".format(item.start)
-        row_cells[1].text = "{}".format(item.end)
-        row_cells[2].text = "{}".format(item.end - item.start)
+
+        ## drop microseconds
+        row_cells[0].text = str(item.start).split(".")[0]
+        row_cells[1].text = str(item.end).split(".")[0]
+        row_cells[2].text = str((item.end - item.start)).split(".")[0]
+
         row_cells[3].text = "{}".format(item.content)
 
     ## set margins
@@ -106,9 +108,11 @@ def buildDocument(values, subs, title, version):
 
         ## if you want other watermarks put them in the assets directory
         ## because that is where we look for this file
-        p = os.path.join(os.path.dirname(os.path.realpath(inspect.stack()[0][1])),"assets")
+        p = os.path.join(
+            os.path.dirname(os.path.realpath(inspect.stack()[0][1])), "assets"
+        )
         logo_run.add_picture(
-            os.path.join(p,values.settings.footer.watermark),
+            os.path.join(p, values.settings.footer.watermark),
             width=Inches(values.settings.footer.width_in),
         )
         footer_para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -132,13 +136,15 @@ def processFiles(values, files: list, version: str):
             buildDocument(values, subs, Path(i).stem, version)
 
 
-
 def init(version: str) -> dict:
     """Put any setup that needs to be done here"""
 
     ## so this beast gets the path to the settings file as an absolute path
     ## to the running script
-    p=os.path.join(os.path.dirname(os.path.realpath(inspect.stack()[0][1])),"srt2docx_settings.yaml")
+    p = os.path.join(
+        os.path.dirname(os.path.realpath(inspect.stack()[0][1])),
+        "srt2docx_settings.yaml",
+    )
 
     ## load settings
     values = munchify(yaml.safe_load(open(p)))
