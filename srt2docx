@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+currentDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+source "${currentDir}/source-me"
+python "${currentDir}/srt2docx.py" $@

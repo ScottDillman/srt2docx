@@ -1,0 +1,55 @@
+[project]
+dynamic = ["version"]
+name = "srt2docx"
+authors = [{ name = "Scott Dillman", email = "scott@bitwise.ninja" }]
+maintainers = [{ name = "Scott Dillman", email = "scott@bitwise.ninja" }]
+description = "Script to convert SRT files to DOCX files with tables"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE.md" }
+keywords = ["docx", "srt"]
+
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 4 - Beta",
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Course Designers",
+    "Topic :: Content Creation :: Automation Tools",
+
+    # Pick your license as you wish (see also "license" above)
+    "License :: OSI Approved :: MIT License",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+]
+
+dependencies = [
+    "certifi==2024.2.2",
+    "charset-normalizer==3.3.2",
+    "docx==0.2.4",
+    "idna==3.6",
+    "loguru==0.7.2",
+    "lxml==5.2.2",
+    "munch==4.0.0",
+    "pillow==10.3.0",
+    "python-docx==1.1.2",
+    "pytz==2024.1",
+    "PyYAML==6.0.1",
+    "requests==2.31.0",
+    "ruff==0.3.2",
+    "srt==3.5.3",
+    "typing_extensions==4.12.2",
+    "urllib3==2.2.1",
+]
+requires-python = ">=3.8"
+
+
+[project.urls]
+Homepage = "https://dreamcyclestudios.com"
+Documentation = "https://readthedocs.org"
+Repository = "https://github.com/me/spam.git"
+Issues = "https://github.com/me/spam/issues"
+Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"

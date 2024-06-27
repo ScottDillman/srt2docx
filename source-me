@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+idempotent_path_prepend ()
+{
+    PATH=${PATH//":$1"/} #delete any instances in the middle or at the end
+    PATH=${PATH//"$1:"/} #delete any instances at the beginning
+    export PATH="$1:$PATH" #prepend to beginning
+}
+
+currentDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+idempotent_path_prepend "${PWD}"
+source "${currentDir}/pyenv/bin/activate"
+idempotent_path_prepend "${PWD}"

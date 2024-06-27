@@ -1,0 +1,16 @@
+certifi==2024.2.2
+charset-normalizer==3.3.2
+docx==0.2.4
+idna==3.6
+loguru==0.7.2
+lxml==5.2.2
+munch==4.0.0
+pillow==10.3.0
+python-docx==1.1.2
+pytz==2024.1
+PyYAML==6.0.1
+requests==2.31.0
+ruff==0.3.2
+srt==3.5.3
+typing_extensions==4.12.2
+urllib3==2.2.1
