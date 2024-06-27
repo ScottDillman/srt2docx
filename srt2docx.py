@@ -12,14 +12,13 @@ DOCX docs
 
 Example:
 
-        $ python srt2docx_funcs.py
+        $ python srt2docx.py
 
 Todo:
     * Option to go directly to google docs
     * Option to combine all files into one docx
     * add recursion option glob.glob('**/*.txt', recursive=True)
     * add better error handling
-    * add tests
 
 This script reads settings from a srt2docx_settings.yaml file in the same directory as the
 script file. Edit this file to personalize the settings. This only has to be done once.

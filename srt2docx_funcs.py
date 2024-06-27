@@ -12,7 +12,7 @@ DOCX docs
 
 Example:
 
-        $ python srt2docx_funcs.py
+        $ python srt2docx.py
 
 
 @Author: Scott Dillman <scott@bitwise.ninja>
