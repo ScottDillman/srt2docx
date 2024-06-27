@@ -10,6 +10,8 @@
 
 Convert srt files to tables in docx
 
+<img src="./assets/example01.png" alt="example01" width="300"/>
+
 This assumes you have a bash environment.
 
 ### Installation
