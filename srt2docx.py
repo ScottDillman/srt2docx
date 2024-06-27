@@ -64,7 +64,7 @@ parser = argparse.ArgumentParser(
 )
 
 ## update me on major changes
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __contact__ = "scott@bitwise.ninja"
 __web__ = "https://dreamcyclesetudios.com"
 
