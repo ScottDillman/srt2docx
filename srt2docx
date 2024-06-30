@@ -3,4 +3,4 @@
 currentDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 source "${currentDir}/source-me"
-python "${currentDir}/srt2docx.py" $@
+python3 "${currentDir}/srt2docx.py" $@
