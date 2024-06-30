@@ -50,6 +50,20 @@ def buildDocument(values, subs, title, version):
 
     ## add SRT data in table
     table = document.add_table(rows=1, cols=values.settings.table.cols)
+    table.autofit = False
+    table.allow_autofit = False
+
+    table.columns[0].width = Inches(0.75)
+    table.rows[0].cells[0].width = Inches(0.75)
+
+    table.columns[1].width = Inches(0.75)
+    table.rows[0].cells[1].width = Inches(0.75)
+
+    table.columns[2].width = Inches(0.75)
+    table.rows[0].cells[2].width = Inches(0.75)
+
+    table.columns[3].width = Inches(5.65)
+    table.rows[0].cells[3].width = Inches(5.65)
 
     ## create table header
     hdr_cells = table.rows[0].cells
@@ -58,6 +72,7 @@ def buildDocument(values, subs, title, version):
         hdr_cells[count].text = h
         count = count + 1
 
+
     ## iterate over the subs and add data to table
     for item in subs:
         row_cells = table.add_row().cells
@@ -65,6 +80,7 @@ def buildDocument(values, subs, title, version):
         ## drop microseconds
         row_cells[0].text = str(item.start).split(".")[0]
         row_cells[1].text = str(item.end).split(".")[0]
+
         row_cells[2].text = str((item.end - item.start)).split(".")[0]
 
         row_cells[3].text = "{}".format(item.content)
