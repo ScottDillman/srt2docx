@@ -1,5 +1,5 @@
 setup:
-	@python -m venv pyenv; \
+	@python3 -m venv pyenv; \
 	source ./pyenv/bin/activate; \
 	pip install -r requirements.txt; \
 	echo activate env with: source ./source-me
