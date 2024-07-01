@@ -28,10 +28,11 @@ from datetime import datetime
 import srt
 import pytz
 from docx import Document
-from docx.shared import Inches
+from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import inspect
 import os
+from docx.enum.style import WD_STYLE_TYPE
 
 
 def readFiles(values) -> list:
@@ -41,49 +42,29 @@ def readFiles(values) -> list:
     return files
 
 
-def buildDocument(values, subs, title, version):
-    """build the docx document"""
+def createDocument(values) -> docx.Document:
+    """Create a new docx document"""
     document = Document()
 
-    ## add base file name as heading
-    document.add_heading(title, 0)
+    ## set normal style to font in settings
+    style = document.styles["Normal"]
+    font = style.font
+    font.name = values.settings.layout.fonts.Normal
 
-    ## add SRT data in table
-    table = document.add_table(rows=1, cols=values.settings.table.cols)
-    table.autofit = False
-    table.allow_autofit = False
+    ## Add stylized heading
+    styles = document.styles
+    new_heading_style = styles.add_style("New Heading", WD_STYLE_TYPE.PARAGRAPH)
+    new_heading_style.base_style = styles["Heading 1"]
+    font = new_heading_style.font
+    font.name = values.settings.layout.fonts.Title
+    font.size = Pt(values.settings.layout.title.size)
+    font.color.rgb = RGBColor.from_string(values.settings.layout.title.color)
 
-    table.columns[0].width = Inches(0.75)
-    table.rows[0].cells[0].width = Inches(0.75)
-
-    table.columns[1].width = Inches(0.75)
-    table.rows[0].cells[1].width = Inches(0.75)
-
-    table.columns[2].width = Inches(0.75)
-    table.rows[0].cells[2].width = Inches(0.75)
-
-    table.columns[3].width = Inches(5.65)
-    table.rows[0].cells[3].width = Inches(5.65)
-
-    ## create table header
-    hdr_cells = table.rows[0].cells
-    count = 0
-    for h in values.settings.table.headers:
-        hdr_cells[count].text = h
-        count = count + 1
+    return document
 
 
-    ## iterate over the subs and add data to table
-    for item in subs:
-        row_cells = table.add_row().cells
-
-        ## drop microseconds
-        row_cells[0].text = str(item.start).split(".")[0]
-        row_cells[1].text = str(item.end).split(".")[0]
-
-        row_cells[2].text = str((item.end - item.start)).split(".")[0]
-
-        row_cells[3].text = "{}".format(item.content)
+def closeDocument(values, name, version, document) -> None:
+    """End and save docx document"""
 
     ## set margins
     document.sections[0].left_margin = Inches(values.settings.layout.margin_left)
@@ -133,26 +114,81 @@ def buildDocument(values, subs, title, version):
         footer_para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
     ## save the doc out using the base name from read file
-    logger.info("Saving: [{}.docx]".format(title))
-    document.save("{}.docx".format(title))
+    logger.info("Saving: [{}.docx]".format(name))
+    document.save("{}.docx".format(name))
 
 
-def processFiles(values, files: list, version: str):
-    """transform files"""
+def buildTable(values, subs, title, document) -> None:
+    """build the docx table and add it to the document"""
+    document.add_paragraph(title, style="New Heading")
+
+    ## add SRT data in table
+    table = document.add_table(rows=1, cols=4)
+    table.autofit = False
+    table.allow_autofit = False
+
+    ## set column widths in table
+    count = 0
+    for c in values.settings.layout.table_cols:
+        table.columns[count].width = Inches(c)
+        table.rows[0].cells[count].width = Inches(c)
+        count = count + 1
+
+    ## create table header
+    hdr_cells = table.rows[0].cells
+    count = 0
+    for h in values.settings.table.headers:
+        ##hdr_cells[count].text = h
+        hdr_cells[count].paragraphs[0].add_run(h).bold = True
+        count = count + 1
+
+    ## iterate over the subs and add data to table
+    for item in subs:
+        row_cells = table.add_row().cells
+
+        ## TODO: fixme
+        ## drop microseconds
+        row_cells[0].text = str(item.start).split(".")[0]
+        row_cells[1].text = str(item.end).split(".")[0]
+        row_cells[2].text = str((item.end - item.start)).split(".")[0]
+        row_cells[3].text = "{}".format(item.content)
+
+
+def processFiles(values, files: list, version: str) -> None:
+    """transform files into tables"""
+
+    d = None
+    if values.settings.single_file:
+        d = createDocument(values)
+
     ## iterate over file list
     for i in files:
         logger.info("Processing: [{}]".format(i))
+
+        if not values.settings.single_file:
+            d = None
         subs = []
         ## open the file for reading
         with open(i) as f:
             ## parse the srt file
             subs = list(srt.parse(f))
-            ## build doc
-            buildDocument(values, subs, Path(i).stem, version)
+            ## build only if we want multi-file
+            if not values.settings.single_file:
+                d = createDocument(values)
+
+            buildTable(values, subs, Path(i).stem, d)
+
+            if not values.settings.single_file:
+                closeDocument(values, Path(i).stem, version, d)
+
+    if values.settings.single_file:
+        p = Path(files[0])
+        n = os.path.basename(os.path.normpath(os.path.dirname(p.absolute())))
+        closeDocument(values, n, version, d)
 
 
 def init(version: str) -> dict:
-    """Put any setup that needs to be done here"""
+    """Load settings from yaml"""
 
     ## so this beast gets the path to the settings file as an absolute path
     ## to the running script

@@ -6,14 +6,28 @@ settings:
   ## see globbing rules here : https://docs.python.org/3/library/glob.html
   filetypes:
     glob: "*.srt"
+
+  ## single file mode, false for multi-file
+  single_file: true
+
   ## table settings
   table:
-    cols: 4
     headers: ["start", "end", "delta", "content"]
   ## margins
   layout:
     margin_left: 0.25
     margin_right: 0.25
+    ## column widths
+    table_cols: [0.75,0.75,0.75,5.65]
+    ## title formatting
+    title:
+      size: 16
+      color: "AE8A40"
+    ## document fonts
+    fonts:
+      Normal: "Arial"
+      Title: "Arial"
+
   ## document meta data
   meta:
     author: "someone@example.com"

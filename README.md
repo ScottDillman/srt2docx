@@ -19,8 +19,8 @@ This assumes you have a bash environment.
 - Source the init script `source source-me`, to activate the python environment
 
 ### Running
-- Change settings in `srt2docx_settings.yaml` to your preferences
-- Go to directory with input files
+- Copy `srt2docx_settings_example.yaml` to `srt2docx_settings.yaml` and add your preferences.
+- Go to directory with input files.
 - execute the script `srt2docx` with the full path, or if you source the `source-me` file it will get added to your path and you can just use `srt2docx` without the path.
 
 ### Watermarks
