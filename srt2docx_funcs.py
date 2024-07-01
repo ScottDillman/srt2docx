@@ -24,7 +24,7 @@ from munch import munchify
 import yaml
 from loguru import logger
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime,timedelta
 import srt
 import pytz
 from docx import Document
@@ -35,6 +35,10 @@ import os
 from docx.enum.style import WD_STYLE_TYPE
 
 
+def round_to_secs(dt: datetime) -> datetime:
+    """round to nearest second"""
+    return timedelta(seconds=int(dt.total_seconds()))
+
 def readFiles(values) -> list:
     """read files from cwd"""
     logger.info("Glob in effect is: [{}]".format(values.settings.filetypes.glob))
@@ -42,7 +46,7 @@ def readFiles(values) -> list:
     return files
 
 
-def createDocument(values) -> docx.Document:
+def createDocument(values) -> Document:
     """Create a new docx document"""
     document = Document()
 
@@ -148,9 +152,13 @@ def buildTable(values, subs, title, document) -> None:
 
         ## TODO: fixme
         ## drop microseconds
-        row_cells[0].text = str(item.start).split(".")[0]
-        row_cells[1].text = str(item.end).split(".")[0]
-        row_cells[2].text = str((item.end - item.start)).split(".")[0]
+        start = round_to_secs(item.start)
+        end   = round_to_secs(item.end)
+        row_cells[0].text = str(start)
+        row_cells[1].text = str(end)
+
+
+        row_cells[2].text = str(round_to_secs(end - start))
         row_cells[3].text = "{}".format(item.content)
 
 
