@@ -33,16 +33,44 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 import inspect
 import os
 from docx.enum.style import WD_STYLE_TYPE
-
+import time
 
 def round_to_secs(dt: datetime) -> datetime:
     """round to nearest second"""
     return timedelta(seconds=int(dt.total_seconds()))
 
+def age(x):
+    return  time.time() - os.path.getmtime(x)
+
+def getbytes(x):
+    return int(os.path.getsize(x))
+
 def readFiles(values) -> list:
     """read files from cwd"""
     logger.info("Glob in effect is: [{}]".format(values.settings.filetypes.glob))
-    files = list(Path().glob(values.settings.filetypes.glob))
+    logger.info("Sorting in effect is: [{}][{}]".format(values.settings.sort.type,values.settings.sort.direction))
+
+    key = None;
+    reverse = False
+
+    if values.settings.sort.direction == 'descending':
+        reverse = True
+    else:
+        reverse = False
+
+    ## sort files here based on settings
+    match values.settings.sort.type:
+        case "name":
+            key = os.path.normpath
+        case "size":
+            key = getbytes
+        case "age":
+            key = age
+        case _:
+            key = os.path.normpath
+
+    files = sorted(list(Path().glob(values.settings.filetypes.glob)),key=key, reverse=reverse)
+
     return files
 
 

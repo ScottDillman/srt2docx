@@ -15,3 +15,7 @@
 - call python3 instead of pythion in shell scripts and make
 - defualt to compiled docx, get name from parent directory
 - fix time difference
+
+## 0.1.3 2024-11-06
+- Add support for file sorting by age,name,size
+- Added file sorting config to yaml

@@ -9,6 +9,12 @@ settings:
 
   ## single file mode, false for multi-file
   single_file: true
+  ## file sorting
+  sort:
+    ## alpha, size, age
+    type: alpha
+    ## ascending or descending
+    direction: descending
 
   ## table settings
   table:
